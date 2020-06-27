@@ -82,10 +82,13 @@ def preprocess_dataset(columns, dropColumn=None, degree = 1):
     X = np.hstack((X_numeric,X_categorical))
     X_train = X[0:891,:]
     X_final_test = X[891:1309,:]
-    # Remove columns with low correlation
-    delColumns, columnNames = removeLowCorrelatedColumns(X_train, y, columnNames, 0.05)
-    X_train = np.delete(X_train, delColumns, axis = 1)
-    X_final_test = np.delete(X_final_test, delColumns, axis = 1)
+    if dropColumn != None:
+    # Remove columns with low only if dropColumn is set.
+    # Otherwise data symmetry is being broken
+        delColumns, columnNames = removeLowCorrelatedColumns(X_train, y, columnNames, 0.05)
+        X_train = np.delete(X_train, delColumns, axis = 1)
+        X_final_test = np.delete(X_final_test, delColumns, axis = 1)
+
     return X_train, X_final_test, y, columnNames
 
 
